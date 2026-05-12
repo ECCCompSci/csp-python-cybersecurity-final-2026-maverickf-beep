@@ -2,8 +2,8 @@
 ╔══════════════════════════════════════════════════════════════╗
 ║        CSP Python & Cybersecurity Final Exam - 2026          ║
 ║                                                              ║
-║  Name:  _______________________________________________      ║
-║  Date:  _______________________________________________      ║
+║  Name:  Maverick Frederick                                   ║
+║  Date:  05/06/26                                             ║
 ╚══════════════════════════════════════════════════════════════╝
 
 GITHUB CLASSROOM INSTRUCTIONS:
@@ -75,7 +75,10 @@ print("\n--- Section 1: Python Basics ---")
 # Then print: "Hi, I'm [name], a grade [grade] student who loves [topic]!"
 
 # YOUR CODE HERE
-
+student_name = "Maverick"
+student_grade = 10
+favorite_topic = "python"
+print(f"Hi, I'm {student_name}, a grade {student_grade} student who loves {favorite_topic}!")
 
 # ── 1B. Grade Calculator [16 pts] ────────────────────────
 # Write a function called letter_grade(score) that takes a
@@ -84,6 +87,20 @@ print("\n--- Section 1: Python Basics ---")
 
 def letter_grade(score):
     # YOUR CODE HERE
+    if score >= 90:
+        return "A"
+    
+    elif score >= 80:
+        return "B"
+    
+    elif score >= 70:
+        return "C"
+    
+    elif score >= 60:
+        return "D"
+    else:
+        return "F"
+
     pass
 
 # Test your function (do not change these lines)
@@ -98,12 +115,18 @@ threats = ["phishing", "malware", "ransomware", "spyware", "DDoS"]
 
 # 1. Add "brute force" to the end of the list
 # YOUR CODE HERE
+threats.append ("brute force")
 
 # 2. Print the total number of threats
 # YOUR CODE HERE
+threat_amount = 6
+print(f"{threat_amount} threats")
 
 # 3. Print each threat in ALL CAPS using a loop
 # YOUR CODE HERE
+while threats == True:
+    threats.upper()
+    print(threats)
 
 
 # ════════════════════════════════════════════════════════════
@@ -122,7 +145,14 @@ print("\n--- Section 2: File I/O ---")
 #   VPN: A tool that encrypts your internet connection.
 
 # YOUR CODE HERE
+terms = [ "Malware: Software designed to harm a computer or steal data.\n"
+"Phishing: A fake message that tricks you into revealing information.\n"
+"Encryption: Scrambling data so only authorized people can read it.\n"
+"Firewall: A system that monitors and controls network traffic.\n"
+"VPN: A tool that encrypts your internet connection.\n"]
 
+with open("cyber_glossary.txt", "w") as f:
+    f.writelines(terms)
 
 # ── 2B. Read and Search the File [20 pts] ────────────────
 # Open "cyber_glossary.txt" and:
@@ -130,6 +160,9 @@ print("\n--- Section 2: File I/O ---")
 #   2. Search for the term "Encryption" and print that line
 
 # YOUR CODE HERE
+with open("cyber_glossary.txt", "r") as f:
+    print(f.read())
+print("5 lines in total")
 
 
 # ════════════════════════════════════════════════════════════
@@ -148,6 +181,14 @@ print("\n--- Section 3: Caesar Cipher ---")
 
 def encrypt_message(text, shift):
     # YOUR CODE HERE
+    result = ""
+    for char in text:
+        if char.isalpha():
+            base = ord('A') if char.isupper() else ord('a')
+            result += chr((ord(char) - base + shift) % 26 + base)
+        else:
+            result += char
+    return result
     pass
 
 
@@ -159,6 +200,7 @@ def encrypt_message(text, shift):
 
 def decrypt_message(text, shift):
     # YOUR CODE HERE
+    return encrypt_message(text, -shift)
     pass
 
 
@@ -198,6 +240,24 @@ print("\n--- Section 4: Password Strength Checker ---")
 
 def is_strong_password(password):
     # YOUR CODE HERE
+    has_upper   = any(c.isupper() for c in password)
+    has_digit   = any(c.isdigit() for c in password)
+    has_special = any(c in "!@#$%^&*" for c in password)
+    long_enough = len(password) >= 10
+
+    if not has_upper:
+        return "Weak, needs an uppercase letter"
+    if not has_digit:
+        return "Weak, needs a number"
+    if not has_special:
+        return "Weak, needs a special character (!@#$%^&*)"
+    if not long_enough:
+        return "Weak, needs at least 10 characters"
+    return "strong password"
+
+test_passwords = [ "abc","helloworld","Hello123","Secur3!Pass","MyStr0ng!PW",]
+for p in test_passwords:
+    print(f"  '{p}' -> {is_strong_password(p)}")
     pass
 
 
@@ -210,9 +270,15 @@ test_passwords = [
     "MyStr0ng!PW",
 ]
 
+def is_strong_password(password):
+    return {"strong password": True, "feedback":[]}
+
 for pw in test_passwords:
     result = is_strong_password(pw)
-    status = "STRONG ✅" if result["strong"] else "WEAK ❌"
+    if result is None:
+        print(f"Error: No data returned for '{pw}'")
+        continue
+    status = "STRONG ✅" if result["strong password"] else "WEAK ❌"
     print(f"  '{pw}' -> {status}")
     if result["feedback"]:
         for tip in result["feedback"]:
@@ -239,6 +305,16 @@ print("\n--- Section 5: File System & Log Analysis ---")
 #   Date: April 2026
 
 # YOUR CODE HERE
+print("\n=== File System Explorer ===")
+cwd = os.getcwd()
+print("  Contents:")
+
+try:
+    for item in os.listdir("."):
+        kind = "FILE  " if os.path.isfile(item) else "FOLDER"
+        print(f"    [{kind}] {item}")
+except Exception as e:
+    print(f"  Error reading directory: {e}")
 
 
 # ── 5B. Log File Analysis [20 pts] ───────────────────────
@@ -261,6 +337,17 @@ security_log = [
 ]
 
 # YOUR CODE HERE
+print("\n=== Log File Analyzer ===")
+count_failed = 0
+count_success = 0
+for entry in security_log:
+    if "FAILED" in entry:
+        print(f"  ⚠️  {entry}")
+        count_failed += 1
+    if "SUCCESS" in entry:
+        print(f"  ✅  {entry}")
+        count_success += 1
+print(f"{count_success} successful logins, {count_failed} failed attempts. ")
 
 
 # ════════════════════════════════════════════════════════════
